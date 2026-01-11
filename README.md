@@ -14,8 +14,12 @@ A custom statusline script that displays:
   - Yellow (25-50%)
   - Orange (50-75%)
   - Red (75-100%)
+- **Sandbox status** - Indicator showing sandbox state:
+  - `◉ sbox` (green) - Sandbox enabled
+  - `○ sbox` (red) - Sandbox disabled
+  - `? sbox` (dim) - No settings file found
 
-Example output: `my-project • main* • claude-opus-4-5-20251101 • ▃ 32%`
+Example output: `my-project • master* • Opus 4.5 • ▃ 32% • ◉ sbox`
 
 ## Installation
 
