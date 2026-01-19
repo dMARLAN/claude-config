@@ -18,7 +18,16 @@ read_input_from_stdin() {
 
 extract_directory_name() {
     cwd=$(echo "$input" | jq -r '.workspace.current_dir')
-    dir_name=$(basename "$cwd")
+}
+
+find_git_root() {
+    git_root=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null)
+    if [ -n "$git_root" ]; then
+        dir_name=$(basename "$git_root")
+    else
+        git_root="$cwd"
+        dir_name=$(basename "$cwd")
+    fi
 }
 
 extract_model_name() {
@@ -78,7 +87,7 @@ format_context_info() {
 }
 
 read_sandbox_status_from_settings() {
-    local settings_file="${cwd}/.claude/settings.local.json"
+    local settings_file="${git_root}/.claude/settings.local.json"
 
     if [ -f "$settings_file" ]; then
         sandbox_enabled=$(jq -r '.sandbox.enabled // false' "$settings_file" 2>/dev/null)
@@ -120,6 +129,7 @@ main() {
     define_colors
     read_input_from_stdin
     extract_directory_name
+    find_git_root
     extract_model_name
     format_context_info
     read_sandbox_status_from_settings
