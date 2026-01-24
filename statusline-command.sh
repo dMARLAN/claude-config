@@ -87,17 +87,9 @@ format_context_info() {
 }
 
 read_sandbox_status_from_settings() {
-    local settings_local="${git_root}/.claude/settings.local.json"
-    local settings_default="${git_root}/.claude/settings.json"
-    local settings_file=""
+    local settings_file="${git_root}/.claude/settings.local.json"
 
-    if [ -f "$settings_local" ]; then
-        settings_file="$settings_local"
-    elif [ -f "$settings_default" ]; then
-        settings_file="$settings_default"
-    fi
-
-    if [ -n "$settings_file" ]; then
+    if [ -f "$settings_file" ]; then
         sandbox_enabled=$(jq -r '.sandbox.enabled // false' "$settings_file" 2>/dev/null)
         if [ "$sandbox_enabled" = "true" ]; then
             sandbox_info=$(printf "${green}◉ sbox${reset}")
