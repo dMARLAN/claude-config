@@ -34,6 +34,19 @@ extract_model_name() {
     model=$(echo "$input" | jq -r '.model.display_name // "unknown"')
 }
 
+format_effort_level() {
+    effort=$(echo "$input" | jq -r '.effort.level // empty')
+
+    case "$effort" in
+        low)    effort_info=$(printf "${dim}○low${reset}") ;;
+        medium) effort_info=$(printf "${green}◔medium${reset}") ;;
+        high)   effort_info=$(printf "${yellow}◑high${reset}") ;;
+        xhigh)  effort_info=$(printf "${orange}◕xhigh${reset}") ;;
+        max)    effort_info=$(printf "${red}●max${reset}") ;;
+        *)      effort_info="" ;;
+    esac
+}
+
 calculate_context_usage_percent() {
     context_size=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
 
@@ -122,7 +135,13 @@ build_statusline_output() {
         output="${output}${sep}${git_info}"
     fi
 
-    output="${output}${sep}${dim}${model}${reset}${sep}${context_info}${sep}${sandbox_info}"
+    output="${output}${sep}${dim}${model}${reset}"
+
+    if [ -n "$effort_info" ]; then
+        output="${output} ${effort_info}"
+    fi
+
+    output="${output}${sep}${context_info}${sep}${sandbox_info}"
 }
 
 main() {
@@ -131,6 +150,7 @@ main() {
     extract_directory_name
     find_git_root
     extract_model_name
+    format_effort_level
     format_context_info
     read_sandbox_status_from_settings
     get_git_branch_with_dirty_indicator

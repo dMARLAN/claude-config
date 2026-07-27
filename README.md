@@ -9,6 +9,12 @@ A custom statusline script that displays:
 - **Directory** (cyan) - Current working directory name
 - **Git branch** (magenta) - Current branch with `*` indicator for uncommitted changes
 - **Model** (dim) - Active Claude model
+- **Effort** - Selected reasoning effort, shown beside the model as a filling dial (hidden for models that don't support effort):
+  - `○low` (dim)
+  - `◔medium` (green)
+  - `◑high` (yellow)
+  - `◕xhigh` (orange)
+  - `●max` (red)
 - **Context usage** - Visual bar with color gradient:
   - Green (0-25%)
   - Yellow (25-50%)
@@ -19,7 +25,7 @@ A custom statusline script that displays:
   - `○ sbox` (red) - Sandbox disabled
   - `? sbox` (dim) - No settings file found
 
-Example output: `my-project • master* • Opus 4.5 • ▃ 32% • ◉ sbox`
+Example output: `my-project • master* • Opus 4.5 ◑high • ▃ 32% • ◉ sbox`
 
 ## Installation
 
