@@ -38,11 +38,11 @@ format_effort_level() {
     effort=$(echo "$input" | jq -r '.effort.level // empty')
 
     case "$effort" in
-        low)    effort_info=$(printf "${dim}○low${reset}") ;;
-        medium) effort_info=$(printf "${green}◔medium${reset}") ;;
-        high)   effort_info=$(printf "${yellow}◑high${reset}") ;;
-        xhigh)  effort_info=$(printf "${orange}◕xhigh${reset}") ;;
-        max)    effort_info=$(printf "${red}●max${reset}") ;;
+        low)    effort_info=$(printf "${dim}○ low${reset}") ;;
+        medium) effort_info=$(printf "${green}◔ medium${reset}") ;;
+        high)   effort_info=$(printf "${yellow}◑ high${reset}") ;;
+        xhigh)  effort_info=$(printf "${orange}◕ xhigh${reset}") ;;
+        max)    effort_info=$(printf "${red}● max${reset}") ;;
         *)      effort_info="" ;;
     esac
 }
