@@ -24,8 +24,9 @@ A custom statusline script that displays:
   - `◉ sbox` (green) - Sandbox enabled
   - `○ sbox` (red) - Sandbox disabled
   - `? sbox` (dim) - No settings file found
+- **Session** - Peer name other sessions use to message this one (blue, looked up from `~/.claude/sessions/`), followed by the first 8 characters of the session ID (dim)
 
-Example output: `my-project • master* • Opus 4.5 ◑ high • ▃ 32% • ◉ sbox`
+Example output: `my-project • master* • Opus 4.5 ◑ high • ▃ 32% • ◉ sbox • my-project-47 139e3742`
 
 ## Installation
 

@@ -8,6 +8,7 @@ define_colors() {
     green="\033[0;32m"
     orange="\033[0;38;5;208m"
     red="\033[0;31m"
+    blue="\033[0;34m"
     reset="\033[0m"
     sep="${dim} • ${reset}"
 }
@@ -27,6 +28,26 @@ find_git_root() {
     else
         git_root="$cwd"
         dir_name=$(basename "$cwd")
+    fi
+}
+
+format_session_info() {
+    local session_id peer_name
+    session_id=$(echo "$input" | jq -r '.session_id // empty')
+
+    if [ -z "$session_id" ]; then
+        session_info=""
+        return
+    fi
+
+    peer_name=$(jq -rs --arg id "$session_id" \
+        'map(select(.sessionId == $id)) | max_by(.updatedAt) | .name // empty' \
+        "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/sessions/*.json 2>/dev/null)
+
+    if [ -n "$peer_name" ]; then
+        session_info=$(printf "${blue}%s${reset} ${dim}%s${reset}" "$peer_name" "${session_id:0:8}")
+    else
+        session_info=$(printf "${dim}%s${reset}" "${session_id:0:8}")
     fi
 }
 
@@ -142,6 +163,10 @@ build_statusline_output() {
     fi
 
     output="${output}${sep}${context_info}${sep}${sandbox_info}"
+
+    if [ -n "$session_info" ]; then
+        output="${output}${sep}${session_info}"
+    fi
 }
 
 main() {
@@ -154,6 +179,7 @@ main() {
     format_context_info
     read_sandbox_status_from_settings
     get_git_branch_with_dirty_indicator
+    format_session_info
     build_statusline_output
     printf "%b" "$output"
 }
