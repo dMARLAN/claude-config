@@ -53,6 +53,17 @@ format_session_info() {
 
 extract_model_name() {
     model=$(echo "$input" | jq -r '.model.display_name // "unknown"')
+    model_id=$(echo "$input" | jq -r '.model.id // empty')
+}
+
+format_model_label() {
+    case "$model_id $model" in
+        *[Ff]able*)  model_label=$(printf "\033[1;38;5;16;48;5;141m ✦ %s ${reset}" "$model") ;;
+        *[Oo]pus*)   model_label=$(printf "\033[1;38;5;173m◆ %s${reset}" "$model") ;;
+        *[Ss]onnet*) model_label=$(printf "\033[0;38;5;75m◇ %s${reset}" "$model") ;;
+        *[Hh]aiku*)  model_label=$(printf "\033[0;38;5;114m· %s${reset}" "$model") ;;
+        *)           model_label=$(printf "${dim}%s${reset}" "$model") ;;
+    esac
 }
 
 format_effort_level() {
@@ -156,7 +167,7 @@ build_statusline_output() {
         output="${output}${sep}${git_info}"
     fi
 
-    output="${output}${sep}${dim}${model}${reset}"
+    output="${output}${sep}${model_label}"
 
     if [ -n "$effort_info" ]; then
         output="${output} ${effort_info}"
@@ -175,6 +186,7 @@ main() {
     extract_directory_name
     find_git_root
     extract_model_name
+    format_model_label
     format_effort_level
     format_context_info
     read_sandbox_status_from_settings
